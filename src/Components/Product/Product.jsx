@@ -23,10 +23,11 @@ const Product = () => {
               Movie Name:{" "}
               <span className="text-sm"> {productDetails?.name}</span>
             </h2>
-            <p className="text-gray-600">
-              Summary:{" "}
-              <span className="text-sm">{productDetails?.summary}</span>
-            </p>
+            <div
+              contentEditable="true"
+              dangerouslySetInnerHTML={{ __html: productDetails?.summary }}
+            ></div>
+
             <button className="bg-blue-500 text-white px-4 py-2  rounded-lg mt-20">
               <Link to={`/products/${productDetails?.id}`}>Get Ticket</Link>
             </button>

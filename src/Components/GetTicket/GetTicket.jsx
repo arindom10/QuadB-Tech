@@ -1,29 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 
 const GetTicket = () => {
   const GetTicketDetails = useLoaderData();
   console.log(GetTicketDetails);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    movie: "",
-    quantity: 1,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [quantity, setQuantity] = useState(1);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData); // You can handle form submission logic here
+    const data = {
+      name,
+      email,
+      movieName: GetTicketDetails?.name,
+      quantity,
+    };
+    console.log(data);
+    localStorage.setItem("user", JSON.stringify(data));
   };
+
+  useEffect(() => {
+    const dataStr = localStorage.getItem("user");
+    const data = dataStr && JSON.parse(dataStr);
+    if (data) {
+      setName(data?.name);
+      setEmail(data?.email);
+      setQuantity(data?.quantity);
+    }
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -37,8 +42,8 @@ const GetTicket = () => {
             type="text"
             id="name"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+            value={name}
+            onChange={(e) => setName(e?.target?.value)}
             placeholder="Enter your name"
             className="border border-gray-300 rounded px-4 py-2 w-full"
           />
@@ -51,8 +56,8 @@ const GetTicket = () => {
             type="email"
             id="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e?.target?.value)}
             placeholder="Enter your email"
             className="border border-gray-300 rounded px-4 py-2 w-full"
           />
@@ -61,15 +66,13 @@ const GetTicket = () => {
           <label htmlFor="movie" className="block text-gray-700 font-bold mb-2">
             Movie
           </label>
-          <select
-            id="movie"
-            name="movie"
-            value={formData.movie}
-            onChange={handleChange}
+          <input
+            id="quantity"
+            name="quantity"
+            value={GetTicketDetails?.name}
+            disabled
             className="border border-gray-300 rounded px-4 py-2 w-full"
-          >
-            <option value="">{GetTicketDetails?.name}</option>
-          </select>
+          />
         </div>
         <div className="mb-4">
           <label
@@ -82,8 +85,8 @@ const GetTicket = () => {
             type="number"
             id="quantity"
             name="quantity"
-            value={formData.quantity}
-            onChange={handleChange}
+            value={quantity}
+            onChange={(e) => setQuantity(e?.target?.value)}
             min="1"
             className="border border-gray-300 rounded px-4 py-2 w-full"
           />
