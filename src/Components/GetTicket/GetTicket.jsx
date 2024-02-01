@@ -16,7 +16,6 @@ const GetTicket = () => {
       movieName: GetTicketDetails?.name,
       quantity,
     };
-    console.log(data);
     localStorage.setItem("user", JSON.stringify(data));
   };
 
